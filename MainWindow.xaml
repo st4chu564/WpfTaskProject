@@ -5,8 +5,32 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfTaskProject"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="{Binding WindowTitle, Mode=OneWay}" Height="450" Width="800"
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="17*"/>
+            <RowDefinition Height="17*"/>
+            <RowDefinition Height="71*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <DataGrid Margin="10" Grid.RowSpan="3" ItemsSource="{Binding personalInfoCollection}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
+                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"/>
+                <DataGridTextColumn Header="Street Name" Binding="{Binding StreetName}"/>
+                <DataGridTextColumn Header="House Number" Binding="{Binding HouseNumber}"/>
+                <DataGridTextColumn Header="Aparment Number" Binding="{Binding ApartmentNumber}"/>
+                <DataGridTextColumn Header="Postal Code" Binding="{Binding PostalCode}"/>
+                <DataGridTextColumn Header="Phone Number" Binding="{Binding PhoneNumber}"/>
+                <DataGridTextColumn Header="Date of birth" Binding="{Binding DateOfBirth, StringFormat='dd/MM/yyyy'}"/>
+                <DataGridTextColumn Header="Age" Binding="{Binding Age}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button IsEnabled="{Binding Path=ChangesMade}" x:Name="button" Content="Zapisz zmiany" Grid.Column="1" Margin="10"/>
+
     </Grid>
 </Window>

@@ -1,0 +1,7 @@
+
+*.ide-wal
+*.ide-shm
+*.ide
+WpfTaskProject/.vs/WpfTaskProject/v16/Server/sqlite3/db.lock
+WpfTaskProject/.vs/WpfTaskProject/v16/.suo
+WpfTaskProject/.vs/WpfTaskProject/v16/Server/sqlite3/storage.ide

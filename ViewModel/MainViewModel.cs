@@ -1,9 +1,10 @@
-using GalaSoft.MvvmLight;
+﻿using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
-using System.Windows;
+using System.Xml.Serialization;
 using System.Windows.Input;
 using WpfTaskProject.Classes;
 
@@ -14,29 +15,65 @@ namespace WpfTaskProject.ViewModel
         /// Initializes a new instance of the MainViewModel class.
         /// </summary>
         public MainViewModel() {
+            personalInfoCollection = new ObservableCollection<PersonalInfo>();
             if(IsInDesignMode) {
                 WindowTitle = "Sample (Design)";
             }
             else {
                 WindowTitle = "Sample";
-                testFill();
+                //testFill();
             }
             personalInfoCollection.ToList().ForEach((field) => {
                 field.PropertyChanged += (s, e) => {
                     ChangesMade = true;
                 };
             });
+            personalInfoCollection.CollectionChanged += (s, e) => {
+                ChangesMade = true;
+                personalInfoCollection.ToList().ForEach((field) => {
+                    field.PropertyChanged += (se, ee) => {
+                        ChangesMade = true;
+                    };
+                });
+            };
+            loadCommand = new RelayCommand(loadedEvent);
+            saveCommand = new RelayCommand(saveTable);
+        }
+        public ICommand loadCommand { get; set; }
+        public ICommand saveCommand { get; set; }
+       
+        public void saveTable() {
+            using(FileStream stream = new FileStream(dbPath, FileMode.Truncate)) {
+                XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<PersonalInfo>));
+                serializer.Serialize(stream, personalInfoCollection);
+                ChangesMade = false;
+            }
         }
 
-        public ICommand LoadedCommand { get; private set; }
-
-        public void testCommand() {
-            MessageBox.Show("Changed");
+        public void loadedEvent() {
+            dbPath = string.Format(@"C:\Users\{0}\database.xml", Environment.UserName);
+            personalInfoCollection.Clear();
+            if(File.Exists(dbPath)) {
+                XmlSerializer serializer = new XmlSerializer(typeof(ObservableCollection<PersonalInfo>));
+                using(FileStream stream = new FileStream(dbPath, FileMode.Open)) {
+                    try {
+                        foreach(var x in (ObservableCollection<PersonalInfo>) serializer.Deserialize(stream)) {
+                            personalInfoCollection.Add(x);
+                        }
+                    }
+                    catch(InvalidOperationException ex) {
+                    }
+                }
+            }
+            else {
+                File.Create(dbPath);
+            }
+            ChangesMade = false;
         }
 
+        public string dbPath;
 
         public void testFill() {
-            personalInfoCollection = new ObservableCollection<PersonalInfo>();
             PersonalInfo test = new PersonalInfo();
             test.PhoneNumber = "535501994";
             test.FirstName = "Dawid";

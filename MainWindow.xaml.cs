@@ -21,5 +21,9 @@ namespace WpfTaskProject {
         public MainWindow() {
             InitializeComponent();
         }
+
+        private void DataGridTextColumn_SelectedDatesChanged(object sender, SelectionChangedEventArgs e) {
+
+        }
     }
 }

@@ -15,11 +15,35 @@ namespace WpfTaskProject.Classes {
         public string StreetName { get; set; }
         [XmlAttribute("HouseNumber")]
         public int HouseNumber { get; set; }
-        [XmlAttribute("AparmentNumber")]
+        [XmlIgnore]
         public int? ApartmentNumber { get; set; }
+        [XmlElement("ApartmentNumber")]
+        public string ApartmentAsString {
+            get {
+                return (ApartmentNumber.HasValue) ? ApartmentNumber.ToString() : null;
+            }
+            set {
+                ApartmentNumber = !string.IsNullOrEmpty(value) ? int.Parse(value) : default(int?);
+            }
+        }
+        [XmlIgnore]
+        public string DateString {
+            get {
+                return DateOfBirth.ToString("dd/MM/yyyy");
+            }
+            set {
+                if(!string.IsNullOrEmpty(value)) {
+                    DateOfBirth = Convert.ToDateTime(value);
+                }
+            }
+        }
+        [XmlAttribute("PostalCode")]
         public string PostalCode { get; set; }
+        [XmlAttribute("PhoneNumber")]
         public string PhoneNumber { get; set; }
+        [XmlAttribute("DateOfBirth")]
         public DateTime DateOfBirth { get; set; }
+        
         public int Age {
             get {
                 if(DateOfBirth == DateTime.MinValue) {

@@ -3,34 +3,53 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:WpfTaskProject"
         mc:Ignorable="d"
         Title="{Binding WindowTitle, Mode=OneWay}" Height="450" Width="800"
         DataContext="{Binding Main, Source={StaticResource Locator}}">
-    <Grid >
+    <Grid>
+        <i:Interaction.Triggers>
+            <i:EventTrigger EventName="Loaded">
+                <i:InvokeCommandAction Command="{Binding loadCommand}" />
+            </i:EventTrigger>
+        </i:Interaction.Triggers>
         <Grid.RowDefinitions>
-            <RowDefinition Height="17*"/>
-            <RowDefinition Height="17*"/>
-            <RowDefinition Height="71*"/>
+            <RowDefinition Height="341*"/>
+            <RowDefinition Height="80*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="163*"/>
+            <ColumnDefinition Width="163*"/>
+            <ColumnDefinition Width="467*"/>
         </Grid.ColumnDefinitions>
-        <DataGrid Margin="10" Grid.RowSpan="3" ItemsSource="{Binding personalInfoCollection}" AutoGenerateColumns="False">
+        <DataGrid Margin="10" ItemsSource="{Binding personalInfoCollection}" AutoGenerateColumns="False" Grid.ColumnSpan="3">
             <DataGrid.Columns>
-                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}"/>
-                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}"/>
-                <DataGridTextColumn Header="Street Name" Binding="{Binding StreetName}"/>
-                <DataGridTextColumn Header="House Number" Binding="{Binding HouseNumber}"/>
-                <DataGridTextColumn Header="Aparment Number" Binding="{Binding ApartmentNumber}"/>
-                <DataGridTextColumn Header="Postal Code" Binding="{Binding PostalCode}"/>
-                <DataGridTextColumn Header="Phone Number" Binding="{Binding PhoneNumber}"/>
-                <DataGridTextColumn Header="Date of birth" Binding="{Binding DateOfBirth, StringFormat='dd/MM/yyyy'}"/>
-                <DataGridTextColumn Header="Age" Binding="{Binding Age}"/>
+                <DataGridTextColumn Width="Auto" Header="First Name" Binding="{Binding FirstName}"/>
+                <DataGridTextColumn Width="Auto" Header="Last Name" Binding="{Binding LastName}"/>
+                <DataGridTextColumn Width="Auto" Header="Street Name" Binding="{Binding StreetName}"/>
+                <DataGridTextColumn Width="Auto" Header="House Number" Binding="{Binding HouseNumber}"/>
+                <DataGridTextColumn Width="Auto" Header="Aparment Number" Binding="{Binding ApartmentNumber}"/>
+                <DataGridTextColumn Width="Auto" Header="Postal Code" Binding="{Binding PostalCode}"/>
+                <DataGridTextColumn Width="Auto" Header="Phone Number" Binding="{Binding PhoneNumber}"/>
+                <DataGridTextColumn Width="Auto" Header="Date of birth" Binding="{Binding DateString}"/>
+                <DataGridTextColumn Width="Auto" Header="Age" Binding="{Binding Age}" IsReadOnly="True"/>
             </DataGrid.Columns>
         </DataGrid>
-        <Button IsEnabled="{Binding Path=ChangesMade}" x:Name="button" Content="Zapisz zmiany" Grid.Column="1" Margin="10"/>
+        <Button IsEnabled="{Binding Path=ChangesMade}" x:Name="saveButton" Content="Zapisz zmiany" Margin="10,10,10.2,10" Grid.Row="1">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <i:InvokeCommandAction Command="{Binding saveCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Button>
+        <Button IsEnabled="{Binding Path=ChangesMade}" x:Name="cancelButton" Content="Cancel" Grid.Column="1" Margin="10" Grid.Row="1">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="Click">
+                    <i:InvokeCommandAction Command="{Binding loadCommand}" />
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </Button>
 
     </Grid>
 </Window>
